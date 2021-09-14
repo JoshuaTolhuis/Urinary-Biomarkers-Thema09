@@ -1,0 +1,20 @@
+---
+title: "Logbook"
+author: "Joshua Tolhuis"
+date: "9/14/2021"
+output: html_document
+---  
+
+
+---
+
+##### Date : di 14 sep,  
+- Created repository.  
+- Chose a data set.
+- Added log.  
+- Checked  data set's documentation
+- Added data file to repository (data gotten from [kaggle](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer))
+- Created an empty EDA file
+- Added EDA file to repository
+- Created a logbook to keep track of progression
+---
