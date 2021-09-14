@@ -1,0 +1,18 @@
+---
+title: "Log"
+author: "Joshua Tolhuis"
+date: "9/14/2021"
+output: html_document
+---  
+
+
+---
+
+##### Date : di 14 sep,  
+- Created repository.  
+- Chose a data et.  
+- Added log.  
+- Checked  data set's documentation
+- Created an empty EDA file
+
+---
