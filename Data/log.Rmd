@@ -3,16 +3,19 @@ title: "Log"
 author: "Joshua Tolhuis"
 date: "9/14/2021"
 output: html_document
----  
-
-
 ---
 
-##### Date : di 14 sep,  
-- Created repository.  
-- Chose a data et.  
-- Added log.  
-- Checked  data set's documentation
-- Created an empty EDA file
+# EDA of Urinary Biomarkers for cancer
 
----
+## Assignment Introduction:
+
+ *insert text here*
+ 
+## Loading in Data
+
+setup and load code book:
+```{r}
+codebook <- read.csv("Debernardi et al 2020 documentation.csv", sep = ",", header = T)
+
+knitr::kable(codebook)
+```

@@ -171,20 +171,105 @@ pre code {
 </div>
 
 
-<hr />
-<div id="date-di-14-sep" class="section level5">
-<h5>Date : di 14 sep,</h5>
-<ul>
-<li>Created repository.<br />
-</li>
-<li>Chose a data et.<br />
-</li>
-<li>Added log.<br />
-</li>
-<li>Checked data set’s documentation</li>
-<li>Created an empty EDA file</li>
-</ul>
-<hr />
+<div id="eda-of-urinary-biomarkers-for-cancer" class="section level1">
+<h1>EDA of Urinary Biomarkers for cancer</h1>
+<div id="assignment-introduction" class="section level2">
+<h2>Assignment Introduction:</h2>
+<p><em>insert text here</em></p>
+</div>
+<div id="loading-in-data" class="section level2">
+<h2>Loading in Data</h2>
+<p>setup and load codebook:</p>
+<pre class="r"><code>codebook &lt;- read.csv(&quot;Debernardi et al 2020 documentation.csv&quot;, sep = &quot;,&quot;, header = T)
+
+knitr::kable(codebook)</code></pre>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="11%" />
+<col width="80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Column.name</th>
+<th align="left">Original.column.name</th>
+<th align="left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">sample_id</td>
+<td align="left">Sample ID</td>
+<td align="left">Unique string identifying each subject</td>
+</tr>
+<tr class="even">
+<td align="left">patient_cohort</td>
+<td align="left">Patient’s Cohort</td>
+<td align="left">Cohort 1, previously used samples; Cohort 2, newly added samples</td>
+</tr>
+<tr class="odd">
+<td align="left">sample_origin</td>
+<td align="left">Sample Origin</td>
+<td align="left">BPTB: Barts Pancreas Tissue Bank, London, UK; ESP: Spanish National Cancer Research Centre, Madrid, Spain; LIV: Liverpool University, UK; UCL: University College London, UK</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="left">Age</td>
+<td align="left">Age in years</td>
+</tr>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="left">Sex</td>
+<td align="left">M = male, F = female</td>
+</tr>
+<tr class="even">
+<td align="left">diagnosis</td>
+<td align="left">Diagnosis (1=Control, 2=Benign, 3=PDAC)</td>
+<td align="left">1 = control (no pancreatic disease), 2 = benign hepatobiliary disease (119 of which are chronic pancreatitis); 3 = Pancreatic ductal adenocarcinoma, i.e. pancreatic cancer</td>
+</tr>
+<tr class="odd">
+<td align="left">stage</td>
+<td align="left">Stage</td>
+<td align="left">For those with pancratic cancer, what stage was it? One of IA, IB, IIA, IIIB, III, IV</td>
+</tr>
+<tr class="even">
+<td align="left">benign_sample_diagnosis</td>
+<td align="left">Benign Samples Diagnosis</td>
+<td align="left">For those with a benign, non-cancerous diagnosis, what was the diagnosis?</td>
+</tr>
+<tr class="odd">
+<td align="left">plasma_CA19_9</td>
+<td align="left">Plasma CA19-9 U/ml</td>
+<td align="left">Blood plasma levels of CA 19–9 monoclonal antibody that is often elevated in patients with pancreatic cancer. Only assessed in 350 patients (one goal of the study was to compare various CA 19-9 cutpoints from a blood sample to the model developed using urinary samples).</td>
+</tr>
+<tr class="even">
+<td align="left">creatinine</td>
+<td align="left">Creatinine mg/ml</td>
+<td align="left">Urinary biomarker of kidney function</td>
+</tr>
+<tr class="odd">
+<td align="left">LYVE1</td>
+<td align="left">LYVE1 ng/ml</td>
+<td align="left">Urinary levels of Lymphatic vessel endothelial hyaluronan receptor 1, a protein that may play a role in tumor metastasis</td>
+</tr>
+<tr class="even">
+<td align="left">REG1B</td>
+<td align="left">REG1B ng/ml</td>
+<td align="left">Urinary levels of a protein that may be associated with pancreas regeneration.</td>
+</tr>
+<tr class="odd">
+<td align="left">TFF1</td>
+<td align="left">TFF1 ng/ml</td>
+<td align="left">Urinary levels of Trefoil Factor 1, which may be related to regeneration and repair of the urinary tract</td>
+</tr>
+<tr class="even">
+<td align="left">REG1A</td>
+<td align="left">REG1A ng/ml</td>
+<td align="left">Urinary levels of a protein that may be associated with pancreas regeneration. Only assessed in 306 patients (one goal of the study was to assess REG1B vs REG1A)</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
