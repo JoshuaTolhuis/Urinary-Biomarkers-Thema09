@@ -11,11 +11,20 @@ output: html_document
 
  *insert text here*
  
-## Loading in Data
+## Data
+
+The data gained was from John Davis, uploaded to kaggle [John Davis](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer).
+He had gotten his data from a paper with the title "A combination of urinary biomarker panel and PancRisk score for earlier detection of pancreatic caner: A case-control study", this is the [link](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003489) to the paper.
 
 setup and load code book:
 ```{r}
 codebook <- read.csv("Debernardi et al 2020 documentation.csv", sep = ",", header = T)
 
 knitr::kable(codebook)
+```
+
+Here is the corresponding data file and it's first 6 entries:
+```{r}
+data <- read.csv("Debernardi et al 2020 data.csv", header = T, sep = ",")
+knitr::kable(head(data))
 ```

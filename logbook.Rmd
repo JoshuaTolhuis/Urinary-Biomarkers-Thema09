@@ -18,3 +18,15 @@ output: html_document
 - Added EDA file to repository
 - Created a logbook to keep track of progression
 ---
+
+##### Date : wo 15 sep,
+- Working from home (sick)
+- Made some adjustments to the log
+- read the corresponding research paper
+- formulated a few questions to gain insight on a possible research question, or to look at in the EDA:
+  * How is  REG1B	beter than	REG1A?
+  * Can you predict Pancreatic ductal adenocarcinoma (PDAC) beter with REG1B than REG1A? 
+  * How well can an algorythm predict PDAC with the improved biomarkers?
+  * Is it possible to use machine learning to predict PDAC with the biomarkers? (same as John Davis)
+  * Does REG1B affect machine learning predictions for a beter outcome than REG1A?
+---
