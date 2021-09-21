@@ -28,3 +28,44 @@ Here is the corresponding data file and it's first 6 entries:
 data <- read.csv("Debernardi et al 2020 data.csv", header = T, sep = ",")
 knitr::kable(head(data))
 ```
+
+Loading up libraries to be used in the EDA and log
+```{r}
+library(ggplot2)
+library(tidyr)
+```
+
+## Intro
+At first, I wanted to know if REG1B could be used only to predict PDAC, but after reconsideration I want to find out what the minimum required data is to find out if a patient has PDAC. Even so i first wanted to run some tests on the newly improved biomarker REG1B to find out it's impact, and it's change relative to REG1A.
+
+Let's take a first look at the effect of REG1B stand alone, what conclusions can be made by looking at the markers found at different stages.
+```{r}
+ggplot(data = data, mapping = aes(x = stage, y = REG1B)) +
+        geom_point(alpha = 0.5) +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("REG1B (ng/mL)")
+```
+In this plot becomes clear, that REG1B is has teh same values at the stages "0, IIB, III and IV" relative to the others. This rises the question with which other data values the results be improved so that stage 0 and I - IIA can be recognized more easily. Lets first try finding patterns using only bodily data such as, age, sex, and body fluids or hormones.
+```{r}
+age.groups <- cut(data$age, breaks = c(25 ,40, 60, 80, 90))
+ggplot(data = data, mapping = aes(x = stage, y = REG1B, col = age.groups)) +
+        geom_point(alpha = 0.5) +
+        geom_jitter()
+```
+
+```{r}
+ggplot(data = data, mapping = aes(x = REG1B, y = LYVE1, col = TFF1)) +
+        geom_point(alpha = 0.5, aes(shape = stage))
+```
+
+```{r}
+ggplot(data = data, mapping = aes(x = REG1B, y = TFF1, col = LYVE1)) +
+        geom_point(alpha = 0.5)
+
+```
+
+```{r}
+#ggplot(data = data, mapping = aes(x = stage, y = c(REG1B, TFF1, LYVE1))) +
+#geom_boxplot()
+
+```

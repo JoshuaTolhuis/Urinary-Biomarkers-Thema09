@@ -16,17 +16,28 @@ output: html_document
 - Added data file to repository (data gotten from [kaggle](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer))
 - Created an empty EDA file
 - Added EDA file to repository
-- Created a logbook to keep track of progression
+- Created a logbook to keep track of progression  
+
 ---
 
 ##### Date : wo 15 sep,
 - Working from home (sick)
 - Made some adjustments to the log
-- read the corresponding research paper
-- formulated a few questions to gain insight on a possible research question, or to look at in the EDA:
+- Read the corresponding research paper
+- Formulated a few questions to gain insight on a possible research question, or to look at in the EDA:
   * How is  REG1B	beter than	REG1A?
   * Can you predict Pancreatic ductal adenocarcinoma (PDAC) beter with REG1B than REG1A? 
-  * How well can an algorythm predict PDAC with the improved biomarkers?
-  * Is it possible to use machine learning to predict PDAC with the biomarkers? (same as John Davis)
-  * Does REG1B affect machine learning predictions for a beter outcome than REG1A?
+  * How well can an algorythm predict PDAC with the improved biomarker?
+  * Is it possible to use machine learning to predict PDAC (and its stages) with the biomarker? (same as John Davis)  
+  * Does REG1B affect machine learning predictions for a beter outcome than REG1A?  
+  * Can you predict the stages of PDAC with only using REG1B?
+  
 ---
+
+##### Date: di 21 sep,
+- Figured out final research question:  
+  "What's the minimal amount of data combinations to predict a patient has pancreatic ductal adenocarcinoma?"  
+- Started work on the EDA and log, tried to combine several data values kind of like simple "oneR's".  
+- Made a few plot's that I'm trying to use to get a better understanding of the biomarkers.
+- Need to find out what makes these biomarkers relation to each other and the stages of PDAC.
+- Need to create a boxplot with all 3 biomarkes and use this to determine the avere combined heights to find out a relation to this and the stage
