@@ -41,3 +41,17 @@ output: html_document
 - Made a few plot's that I'm trying to use to get a better understanding of the biomarkers.
 - Need to find out what makes these biomarkers relation to each other and the stages of PDAC.
 - Need to create a boxplot with all 3 biomarkes and use this to determine the avere combined heights to find out a relation to this and the stage
+
+---
+
+##### Date: do 23 sep,
+- made the box plot containing all 3 bio markers
+- normalized data (need to apply to box plot)
+- tried my hand at a PCA and a 3d PCA (plots work, no idea what they are comparing in the 2d pca)
+- to do:
+  * 3d PCA needs axis labels
+  * figure out what 2d PCA does
+  * normalize data for box plots
+  * compare more oneR type plots
+  * write intro's and conclusions into log
+  * compile conclusions and plots in EDA
