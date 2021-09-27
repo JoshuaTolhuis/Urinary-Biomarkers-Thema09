@@ -2,7 +2,9 @@
 title: "Log"
 author: "Joshua Tolhuis"
 date: "9/14/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 # EDA of Urinary Biomarkers for cancer
@@ -55,7 +57,7 @@ ggplot(data = data, mapping = aes(x = stage, y = REG1B)) +
         xlab("Stages of PDAC (I-IV)") +
         ylab("REG1B (ng/mL)")
 ```
-In this plot becomes clear, that REG1B is has teh same values at the stages "0, IIB, III and IV" relative to the others. This rises the question with which other data values the results be improved so that stage 0 and I - IIA can be recognized more easily. Lets first try finding patterns using only bodily data such as, age, sex, and body fluids or hormones.
+In this plot becomes clear, that REG1B has the same values at the stages "0, IIB, III and IV" relative to the others. This rises the question with which other data values the results be improved so that stage 0 and I - IIA can be recognized more easily. Lets first try finding patterns using only bodily data such as, age, sex, and body fluids or hormones.
 
 ```{r}
 age.groups <- cut(data$age, breaks = c(25 ,40, 60, 80, 90))
@@ -83,41 +85,85 @@ ggplot(data = data, mapping = aes(x = stage, y = creatinine)) +
         geom_jitter(alpha = 0.7, aes(col = data$LYVE1))
 
 ```
-
+scaling function:
 ```{r}
-data %>% select(REG1B, TFF1, LYVE1, stage) %>%
-pivot_longer(., cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+scale_min_max <- function(x) {
+     (x - min(x)) / (max(x) - min(x))
+}
+```
+
+outlier removal function:
+```{r}
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+  qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+  H <- 1.5 * IQR(x, na.rm = na.rm)
+  y <- x
+  y[x < (qnt[1] - H)] <- NA
+  y[x > (qnt[2] + H)] <- NA
+  y
+}
+```
+several boxplots on the biomarkers, first with normal data, second with scaled data, third with scaled data and outliers removed
+```{r}
+
+scaled_data <- data
+
+scaled_data$REG1B <- scale_min_max(scaled_data$REG1B)
+scaled_data$TFF1 <- scale_min_max(scaled_data$TFF1)
+scaled_data$LYVE1 <- scale_min_max(scaled_data$LYVE1)
+
+p1 <- pivot_longer(data = data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
         ggplot(aes(x = Var, y = Val, fill = stage)) +
         geom_boxplot()
-        
 
-
+p2 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = Val, fill = stage)) +
+        geom_boxplot()
+p3 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = remove_outliers(Val), fill = stage)) +
+        geom_boxplot()
+p1
+p2
+p3
 
 ```
 
 
+
 ```{r}
-p1 <- ggplot(data = data, mapping = aes(x = stage, y = LYVE1, fill = stage)) +
-        geom_boxplot(alpha = 0.7) +
-        ylim(0, 15)
+p1 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(LYVE1), fill = stage)) +
+        geom_boxplot(alpha = 0.7)
 
-p2 <- ggplot(data = data, mapping = aes(x = stage, y = TFF1, fill = stage)) +
-        geom_boxplot(alpha = 0.7) +
-        ylim(0, 5000)
+p2 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(TFF1), fill = stage)) +
+        geom_boxplot(alpha = 0.7)
 
-p3 <- ggplot(data = data, mapping = aes(x = stage, y = REG1B, fill = stage)) +
+p3 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(REG1B), fill = stage)) +
         geom_boxplot(alpha = 0.7)
 
 grid.arrange(p1, p2, p3, nrow = 2)
 
 
 ```
+```{r}
+ggplot(data = data, mapping = aes(x= stage, y = age)) +
+        geom_boxplot(fill = 'green') +
+        geom_jitter(alpha = 0.5)
+
+
+ggplot(data = data, mapping = aes(x = age, y = LYVE1)) +
+        geom_point(alpha = 0.7) + 
+        geom_smooth(method = "loess", formula = "y ~ x")
+
+
+#ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(TFF1), fill = stage)) +
+#        geom_boxplot(alpha = 0.7)
+
+#ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(REG1B), fill = stage)) +
+#        geom_boxplot(alpha = 0.7)
+```
+
 
 ```{r}
-scale_min_max <- function(x) {
-     (x - min(x)) / (max(x) - min(x))
-}
-
 df <- as.data.frame(data[392:590,])
 row.names(df) <- paste(df$stage, row.names(df), sep="_")
 
@@ -131,4 +177,25 @@ ggplot(df, aes(x= scale_min_max(TFF1), y = scale_min_max(LYVE1), z = scale_min_m
   stat_3D() +
         xlab("TFF1")
 
+```
+
+heatmap
+```{r}
+
+selection <- c("age", "plasma_CA19_9", "creatinine", "LYVE1", "TFF1", "REG1B", "REG1A")
+
+tmp <- data %>% select(selection) %>% drop_na()
+
+cor_matrix <- cor(tmp)
+
+cor_matrix <- as_tibble(cor_matrix)
+(cor_matrix <- cor_matrix %>% mutate(var1=selection) %>% select(8,1:7))
+
+cor_matrix_long <- pivot_longer(data = cor_matrix, cols = selection, names_to = "variable", values_to = "cor")
+
+
+ggplot(data = cor_matrix_long, aes(x=var1, y=variable, fill=cor)) + 
+    geom_tile() + 
+    labs(x=NULL, y=NULL) + 
+    scale_fill_gradient(high = "red", low = "white" )
 ```

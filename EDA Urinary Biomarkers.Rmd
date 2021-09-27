@@ -2,20 +2,192 @@
 title: "EDA"
 author: "Joshua Tolhuis"
 date: "9/14/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
+## Assignment Introduction:
+In this assignment I was tasked to research an existing data file given to me and apply data mining & machine learning to predict the outcome. I first was tasked creating a research question around the data. My question went as follows:
+"What's the minimal amount of data combinations to predict a patient has pancreatic ductal adenocarcinoma?"
+
+
+## Data
+
+The data gained was from John Davis, uploaded to kaggle [John Davis](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer).
+He had gotten his data from a paper with the title "A combination of urinary biomarker panel and PancRisk score for earlier detection of pancreatic caner: A case-control study", this is the [link](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1003489) to the paper.  
+
+setup and load code book:  
+
+Loading up libraries to be used in the EDA and log.  
+```{r, results='hide', message=FALSE, warning=FALSE}
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("sinhrks/ggfortify")
+devtools::install_github("AckerDWM/gg3D")
+library("gg3D")
+library(ggplot2)
+library(tidyr)
+library(gridExtra) 
+library(dplyr)
+library(plotly)
+library(cluster)
+library(ggfortify)
+```
+
+Let's begin with loading in the required data and the code book describing it.    
 ```{r}
 setwd("./Data")
 
 data <- read.csv("Debernardi et al 2020 data.csv", header = T, sep = ",")
+str(data[])
+
+codebook <- read.csv("Debernardi et al 2020 documentation.csv", sep = ",", header = T)
+
+knitr::kable(codebook[2:3])
 ```
 
+## Intro
+At first, I wanted to know if REG1B could be used only to predict PDAC, but after reconsideration I want to find out what the minimum required data is to find out if a patient has PDAC. Even so i first wanted to run some tests on the newly improved biomarker REG1B to find out it's impact, and it's change relative to REG1A.  
+
+
+## Results
+Let's take a first look at the effect of REG1B stand alone, what conclusions can be made by looking at the markers found at different stages.  
 ```{r}
-library(ggplot2)
+ggplot(data = data, mapping = aes(x = stage, y = REG1B, col = stage)) +
+        geom_point(alpha = 0.7) +
+        geom_jitter() +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("REG1B (ng/mL)")
 ```
 
+In this plot becomes clear, that REG1B has the same values at the stages "0, IIB, III and IV" relative to the others. This immediately shuts down the proposition to predict stages of cancer with only 1 variable.  
+
+In order to find out more I decided to view the other bio markers and this time with a box plot to see if there was a recognizable trend.I tried several box plots on the bio markers, first with normal data, second with scaled data, third with outliers removed and the last plot has been scaled and the outliers removed from it. I also had to create functions for the latter 3 plots.  
+
+scaling function:  
 ```{r}
-max(data$REG1B)
-min(data$REG1B)
+scale_min_max <- function(x) {
+     (x - min(x)) / (max(x) - min(x))
+}
 ```
+
+outlier removal function:  
+```{r}
+remove_outliers <- function(x, na.rm = TRUE, ...) {
+  qnt <- quantile(x, probs=c(.25, .75), na.rm = na.rm, ...)
+  H <- 1.5 * IQR(x, na.rm = na.rm)
+  y <- x
+  y[x < (qnt[1] - H)] <- NA
+  y[x > (qnt[2] + H)] <- NA
+  y
+}
+```
+
+I printed them all separately to get a better view.  
+```{r}
+
+scaled_data <- data
+
+scaled_data$REG1B <- scale_min_max(scaled_data$REG1B)
+scaled_data$TFF1 <- scale_min_max(scaled_data$TFF1)
+scaled_data$LYVE1 <- scale_min_max(scaled_data$LYVE1)
+
+p1 <- pivot_longer(data = data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = Val, fill = stage)) +
+        geom_boxplot()
+
+p2 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = Val, fill = stage)) +
+        geom_boxplot()
+p3<- pivot_longer(data = data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = remove_outliers(Val), fill = stage)) +
+        geom_boxplot()
+p4 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
+        ggplot(aes(x = Var, y = remove_outliers(Val), fill = stage)) +
+        geom_boxplot()
+
+p1 #normal data
+p2 #scaled data
+p3 #outliers removed
+p4 #scaled data and outliers removed
+
+```
+
+From these plots a few things are noticeable. First of all the without outliers the difference between stage 0 and other stages becomes compelling. This is good to know to be able to make predictions, but seeing as this is cancer and false positives or false negatives are dangerous. outliers will be necessary to make valid predictions. the second noticeable thing is that there is indeed a trend within the bio markers and stages. This is precious information to be able to predict the stages of cancer.  
+
+To find out the most prominent factor within the bio markers i decided to plot them again individually  
+```{r}
+p1 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(LYVE1), fill = stage)) +
+        geom_boxplot(alpha = 0.7)
+
+p2 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(TFF1), fill = stage)) +
+        geom_boxplot(alpha = 0.7)
+
+p3 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(REG1B), fill = stage)) +
+        geom_boxplot(alpha = 0.7)
+
+grid.arrange(p1, p2, p3, nrow = 2)
+
+
+```
+
+
+After this I wanted to know if age might be an important factor to the output of the bio markers so i tried a plot and added a trend line. 
+
+```{r}
+p1 <- ggplot(data = data, mapping = aes(x = age, y = LYVE1)) +
+        geom_point(alpha = 0.7) + 
+        geom_smooth(method = "loess", formula = "y ~ x")
+p2 <- ggplot(data = data, mapping = aes(x = age, y = TFF1)) +
+        geom_point(alpha = 0.7) + 
+        geom_smooth(method = "loess", formula = "y ~ x")
+p3 <- ggplot(data = data, mapping = aes(x = age, y = REG1B)) +
+        geom_point(alpha = 0.7) + 
+        geom_smooth(method = "loess", formula = "y ~ x")
+
+grid.arrange(p1, p2, p3, nrow = 2)
+```
+
+In these plots I concluded that age indeed has an effect on the outcome of the 'LYVE1' bio marker. The other 2 also had a ascending trend line but they show less of an increase that LYVE1.  
+
+There were also creatinine, and blood plasma factors within the data.  
+In order to find more correlations I decided to create a heat map to find more correlation within these variables.  
+```{r}
+
+selection <- c("age", "plasma_CA19_9", "creatinine", "LYVE1", "TFF1", "REG1B", "REG1A")
+
+tmp <- data %>% select(selection) %>% drop_na()
+
+cor_matrix <- cor(tmp)
+
+cor_matrix <- as_tibble(cor_matrix)
+(cor_matrix <- cor_matrix %>% mutate(var1=selection) %>% select(8,1:7))
+
+cor_matrix_long <- pivot_longer(data = cor_matrix, cols = selection, names_to = "variable", values_to = "cor")
+
+
+ggplot(data = cor_matrix_long, aes(x=var1, y=variable, fill=cor)) + 
+    geom_tile() + 
+    labs(x=NULL, y=NULL) + 
+    scale_fill_gradient(high = "red", low = "white" )
+```
+This heat map shows that bio markers have a high correlation, TFF1 and LYVE1 look like they have the highest correlation.
+LYVE1 is indeed as predicted very correlated to age and TFF1 and LYVE1 to creatinine. It's also clear that REG1A has been improved considerably and REG1B has a much higher correlation to other factors.
+
+In order to further look at the correlation between the bio markers I decided to create a PCA.  
+```{r}
+df <- data[c(11:13)]
+  #clustered by stage
+pca_res <- prcomp(df, scale = TRUE)
+  autoplot(pca_res, data = data, colour = 'stage', frame = TRUE, frame.type = 'norm')
+  
+  
+  #clustered by bio marker
+  autoplot(pam(data[11:13], 3), frame = TRUE, frame.type = 'norm')
+```
+
+Here I visualized the clusters decided by stage, and the second plot I clustered by bio marker.  
+
+## Conclusion
+
+I concluded that it should be possible to decide the stage of cancer by less data than given. The 3 bio markers should give a clear prediction and this can be helped with the age factor.

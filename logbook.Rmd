@@ -55,3 +55,21 @@ output: html_document
   * compare more oneR type plots
   * write intro's and conclusions into log
   * compile conclusions and plots in EDA
+  
+---
+
+##### Date: su 26 sep,
+- adding text to EDA
+- added heatmap to log
+- add axis labels to 3D PCA
+- normilazed (scaled) data for boxplots
+- removed outliers for some plots
+- added regression lines
+
+---
+
+##### Date: Mo 27 sep,
+
+- finishing touches, to log
+- writing down everything into EDA
+- submitting EDA
