@@ -57,7 +57,8 @@ ggplot(data = data, mapping = aes(x = stage, y = REG1B, col = stage)) +
         geom_point(alpha = 0.7) +
         geom_jitter() +
         xlab("Stages of PDAC (I-IV)") +
-        ylab("REG1B (ng/mL)")
+        ylab("REG1B (ng/mL)") +
+        ggtitle("Stages of PDAC versus REG1B")
 ```
 
 In this plot becomes clear, that REG1B has the same values at the stages "0, IIB, III and IV" relative to the others. This immediately shuts down the proposition to predict stages of cancer with only 1 variable.  
@@ -94,17 +95,28 @@ scaled_data$LYVE1 <- scale_min_max(scaled_data$LYVE1)
 
 p1 <- pivot_longer(data = data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
         ggplot(aes(x = Var, y = Val, fill = stage)) +
-        geom_boxplot()
+        geom_boxplot() +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (ng/mL)") +
+        ggtitle("Stages of PDAC versus biomarkers")
 
 p2 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
         ggplot(aes(x = Var, y = Val, fill = stage)) +
-        geom_boxplot()
+        geom_boxplot() +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (scaled 0 - 1)") +
+        ggtitle("Stages of PDAC versus biomarkers")
+
 p3<- pivot_longer(data = data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
         ggplot(aes(x = Var, y = remove_outliers(Val), fill = stage)) +
         geom_boxplot()
+
 p4 <- pivot_longer(data = scaled_data, cols = c(REG1B,TFF1,LYVE1), names_to = "Var", values_to = "Val") %>%
         ggplot(aes(x = Var, y = remove_outliers(Val), fill = stage)) +
-        geom_boxplot()
+        geom_boxplot() +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (scaled 0 - 1)") +
+        ggtitle("Stages of PDAC versus biomarkers")
 
 p1 #normal data
 p2 #scaled data
@@ -118,13 +130,19 @@ From these plots a few things are noticeable. First of all the without outliers 
 To find out the most prominent factor within the bio markers i decided to plot them again individually  
 ```{r}
 p1 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(LYVE1), fill = stage)) +
-        geom_boxplot(alpha = 0.7)
+        geom_boxplot(alpha = 0.7) +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (scaled 0 - 1)")
 
 p2 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(TFF1), fill = stage)) +
-        geom_boxplot(alpha = 0.7)
+        geom_boxplot(alpha = 0.7) +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (scaled 0 - 1)")
 
 p3 <- ggplot(data = data, mapping = aes(x = stage, y = scale_min_max(REG1B), fill = stage)) +
-        geom_boxplot(alpha = 0.7)
+        geom_boxplot(alpha = 0.7) +
+        xlab("Stages of PDAC (I-IV)") +
+        ylab("Biomarkers (scaled 0 - 1)")
 
 grid.arrange(p1, p2, p3, nrow = 2)
 
@@ -137,14 +155,24 @@ After this I wanted to know if age might be an important factor to the output of
 ```{r}
 p1 <- ggplot(data = data, mapping = aes(x = age, y = LYVE1)) +
         geom_point(alpha = 0.7) + 
-        geom_smooth(method = "loess", formula = "y ~ x")
+        geom_smooth(method = "loess", formula = "y ~ x") +
+        xlab("Age") +
+        ylab("LYVE1 (ng/mL)") +
+        ggtitle("Age against LYVE1")
+
 p2 <- ggplot(data = data, mapping = aes(x = age, y = TFF1)) +
         geom_point(alpha = 0.7) + 
-        geom_smooth(method = "loess", formula = "y ~ x")
+        geom_smooth(method = "loess", formula = "y ~ x") +
+        xlab("Age") +
+        ylab("TFF1 (ng/mL)") +
+        ggtitle("Age against TFF1")
+
 p3 <- ggplot(data = data, mapping = aes(x = age, y = REG1B)) +
         geom_point(alpha = 0.7) + 
-        geom_smooth(method = "loess", formula = "y ~ x")
-
+        geom_smooth(method = "loess", formula = "y ~ x") +
+        xlab("Age") +
+        ylab("REG1B (ng/mL)") +
+        ggtitle("Age against REG1B")
 grid.arrange(p1, p2, p3, nrow = 2)
 ```
 
@@ -169,7 +197,9 @@ cor_matrix_long <- pivot_longer(data = cor_matrix, cols = selection, names_to = 
 ggplot(data = cor_matrix_long, aes(x=var1, y=variable, fill=cor)) + 
     geom_tile() + 
     labs(x=NULL, y=NULL) + 
-    scale_fill_gradient(high = "red", low = "white" )
+    scale_fill_gradient(high = "red", low = "white" ) +
+        theme(axis.text.x = element_text(angle = 90)) +
+        ggtitle("Correlation between numerical values")
 ```
 This heat map shows that bio markers have a high correlation, TFF1 and LYVE1 look like they have the highest correlation.
 LYVE1 is indeed as predicted very correlated to age and TFF1 and LYVE1 to creatinine. It's also clear that REG1A has been improved considerably and REG1B has a much higher correlation to other factors.
