@@ -221,3 +221,28 @@ Here I visualized the clusters decided by stage, and the second plot I clustered
 ## Conclusion
 
 I concluded that it should be possible to decide the stage of cancer by less data than given. The 3 bio markers should give a clear prediction and this can be helped with the age factor.
+
+## Criteria 
+For this research i Think the most valuable is accuracy, speed isn't necessary as I don't think it matters if takes 1 or 10 seconds to process. online classification also isn't important because o normal person probably doesn't have data on bio markers in his presence. Accuracy is the most important as False negatives or False positives are extremely dangerous.
+
+## Cleaning data
+To use the data in an algorithm, a few columns should be removed that aren't useful.
+first of all the benign sample data, patient cohort and sample origin. I will also remove REG1A as it has a lot of NA values and REG1B is a better version of this bio marker. I will also remove blood plasma as there are again a lot of NA values and the goal of this research is using the least amount of data_values anyway. I also made stage "" into stage 0 as weka doesn't understand "".
+
+```{r}
+
+data$stage <- replace(data$stage,0:391, "none")
+
+row.has.na <- apply(data[1:13], 1, function(x){any(is.na(x))})
+filtered <- data[!row.has.na,]
+
+data$cancer <- data[6]
+
+data$
+
+
+write.csv(filtered[c(4:7 ,9:13)], "Cleaned_data.csv")
+```
+
+## Results WEKA
+in the WEKA I was able to use the logistics algorithm to gain a 75% correct model, and with the stages added to the list i was able to get it to 86%. Adding the stages however is like cheating, as of course you could predict if somebody has malignant cancer if you know he's in the 3rd or 4th stage. Still I saved the model as the research paper where the data was gained from achieved a >80% SP and SN rate while using this. I was able to get the model to 75% without the use of age and sex. But it seemed that the other variables only decreased the percentage of correct predictions if removed.
