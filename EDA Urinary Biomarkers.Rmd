@@ -246,3 +246,134 @@ write.csv(filtered[c(4:7 ,9:13)], "Cleaned_data.csv")
 
 ## Results WEKA
 in the WEKA I was able to use the logistics algorithm to gain a 75% correct model, and with the stages added to the list i was able to get it to 86%. Adding the stages however is like cheating, as of course you could predict if somebody has malignant cancer if you know he's in the 3rd or 4th stage. Still I saved the model as the research paper where the data was gained from achieved a >80% SP and SN rate while using this. I was able to get the model to 75% without the use of age and sex. But it seemed that the other variables only decreased the percentage of correct predictions if removed.
+
+## ROC
+Here we are looking at the ROC.
+```{r}
+roc_data <- read.table("Data/ROC.arff", 
+                   sep = ",", 
+                   comment.char = "@")
+names(roc_data) <- c("Instance_number", 
+                 "True_Positives",
+                 "False_Negatives",
+                 "False_Positives",
+                 "True_Negatives",
+                 "False_Positive_Rate",
+                 "True_Positive_Rate",
+                 "Precision",
+                 "Recall",
+                 "Fallout",
+                 "FMeasure",
+                 "Sample_Size",
+                 "Lift",
+                 "Threshold")
+
+ 
+
+head(roc_data)
+
+ 
+
+library(ggpubr)
+colors <- c(classifier = "red", threshold = "blue")
+plt1 <- ggplot(data = roc_data,
+       mapping = aes(x = False_Positive_Rate, y = True_Positive_Rate)) +
+    geom_point(mapping = aes(color = "classifier")) +
+    geom_abline(aes(color = "threshold", 
+                    slope = 1, 
+                    intercept = 0)) + 
+    scale_color_manual(values = colors) +
+    xlab("True Positive Rate") +
+    ylab("False Positive Rate") +
+    #theme_minimal() +
+    theme_pubr() +
+    theme_minimal() +
+    theme(legend.title = element_blank())
+
+
+roc_data <- read.table("Data/ROC2.arff", 
+                   sep = ",", 
+                   comment.char = "@")
+names(roc_data) <- c("Instance_number", 
+                 "True_Positives",
+                 "False_Negatives",
+                 "False_Positives",
+                 "True_Negatives",
+                 "False_Positive_Rate",
+                 "True_Positive_Rate",
+                 "Precision",
+                 "Recall",
+                 "Fallout",
+                 "FMeasure",
+                 "Sample_Size",
+                 "Lift",
+                 "Threshold")
+
+ 
+
+head(roc_data)
+
+ 
+
+library(ggpubr)
+colors <- c(classifier = "red", threshold = "blue")
+plt2 <- ggplot(data = roc_data,
+       mapping = aes(x = False_Positive_Rate, y = True_Positive_Rate)) +
+    geom_point(mapping = aes(color = "classifier")) +
+    geom_abline(aes(color = "threshold", 
+                    slope = 1, 
+                    intercept = 0)) + 
+    scale_color_manual(values = colors) +
+    xlab("True Positive Rate") +
+    ylab("False Positive Rate") +
+    #theme_minimal() +
+    theme_pubr() +
+    theme_minimal() +
+    theme(legend.title = element_blank())
+
+
+roc_data <- read.table("Data/ROC3.arff", 
+                   sep = ",", 
+                   comment.char = "@")
+names(roc_data) <- c("Instance_number", 
+                 "True_Positives",
+                 "False_Negatives",
+                 "False_Positives",
+                 "True_Negatives",
+                 "False_Positive_Rate",
+                 "True_Positive_Rate",
+                 "Precision",
+                 "Recall",
+                 "Fallout",
+                 "FMeasure",
+                 "Sample_Size",
+                 "Lift",
+                 "Threshold")
+
+ 
+
+head(roc_data)
+
+ 
+
+library(ggpubr)
+colors <- c(classifier = "red", threshold = "blue")
+plt3 <- ggplot(data = roc_data,
+       mapping = aes(x = False_Positive_Rate, y = True_Positive_Rate)) +
+    geom_point(mapping = aes(color = "classifier")) +
+    geom_abline(aes(color = "threshold", 
+                    slope = 1, 
+                    intercept = 0)) + 
+    scale_color_manual(values = colors) +
+    xlab("True Positive Rate") +
+    ylab("False Positive Rate") +
+    #theme_minimal() +
+    theme_pubr() +
+    theme_minimal() +
+    theme(legend.title = element_blank())
+
+
+print(plt1)
+print(plt2)
+print(plt3)
+```
