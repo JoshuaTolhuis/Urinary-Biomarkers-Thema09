@@ -1,0 +1,262 @@
+---
+title: "Pancreatic Ductal AdenoCarcinoma"
+author: "Joshua Tolhuis"
+date: "11/12/2021"
+output: pdf_document
+---
+Pancreatic Ductal AdenoCarcinoma
+Results of Visualization on biomarkers and cancer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Naam:            Joshua Tolhuis
+Studentnummer:    390799
+Klas:            BFV3
+Datum:            05/10/2021
+Docenten:        Michiel Noback
+
+Pancreatic Ductal AdenoCarcinoma
+Results of Visualization on biomarkers and cancer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Naam:            Joshua Tolhuis
+Studentnummer:    390799
+Studierichting:         Bio-informatica
+Klas:            BFV3
+Datum:            05/10/2021
+Docenten:        Michiel Noback
+Table of Contents
+
+Table of Contents    3
+Abbreviations    4
+Introduction    5
+Results    6
+Discussion & Conclusion    14
+resume results    14
+discussion    14
+Perspective and conclusion:    14
+References    15
+
+Abbreviations
+Pancreatic Ductal AdenoCarcinoma (PDAC)
+Exploratory Data Analysis (EDA)
+
+Introduction
+This report is about visualisation of the data gained by the “Urinary biomarkers for pancreatic cancer” dataset [1].  The paper referenced on this website uses biomarkers in order to check if somebody has pancreatic cancer. The main reason for this paper was to test if their newly improved biomarker (REG1B), was better than their other older biomarker (REG1A). Which they concluded to be true.
+
+In this report the data is visualised using the programming language R. The goal of this report is to discuss and conclude the results of the Exploratory Data Analysis (EDA). 
+
+In the EDA the main thesis was, “What’s the minimal amount of data combinations to predict a patient has pancreatic ductal adenocarcinoma?”.  In order to answer this, the first step was to visualize the data using R, and later on WEKA will be used in order to try and find the least amount of data values.
+Results
+The EDA gave some useful insights regarding the obtained dataset.
+The first step was to see all the data by making a small table containing the data to test if it all loaded in properly and if any data was missing, here’s a small preview of this table.
+
+
+sample_id
+chr
+S1
+S10
+S100
+S101
+patient_cohort
+chr
+Cohort1
+Cohort1
+Cohort2
+Cohort2
+sample_origin
+chr
+BPTB
+BPTB
+BPTB
+BPTB
+ age
+int
+ 33
+81
+ 51 
+61
+sex
+chr
+F
+F
+M
+M
+diagnosis
+int
+1
+1
+1
+1
+stage
+chr
+
+
+
+
+
+
+
+
+benign_sample_diagnosis
+chr
+
+
+
+
+
+
+
+
+plasma_CA19_9
+num
+11.7
+NA
+7
+8
+creatinine
+num
+1.832
+0.973
+0.78
+0.701
+LYVE1
+num
+0.89322
+2.03758
+0.14559
+0.0028
+REG1B
+num
+52.9
+94.5
+102.4
+60.6
+TFF1
+num
+654.3
+209.5
+461.1
+142.9
+REG1A
+num
+1262
+228
+NA
+NA
+
+
+As can be seen in this small table, A few problems arise, the stage and benign_sampele_diagnosis. appear to be empty, but after closer inspection of the data it just means that these people aren’t yet in a stage and also do not have a benign sample because they are the control group and don’t have Pancreatic Ductal AdenoCarcinoma(PDAC). After checking the codebook, All the data was accounted for and no cleaning needed to be done.
+The first thing to look at was just a general view of the biomarker and how it corresponded to different stages of PDAC. The biomarker chosen was REG1B,
+Interestingly REG1B in some cases actually looks like it has a way higher value than in the control group, This can be used in order to perhaps create a cut-of-value for a later algorithm.
+
+
+
+In order to see if this phenomenon was also true for the other biomarkers. The next plot to be created was a boxplot containing all 3 biomarkers. REG1A was excluded because REG1B was an improvement of this biomarker so it wasn’t deemed necessary.
+
+
+
+
+
+In this plot it became evident that scaling needed to be applied, the values of LYVE1 were extremely lower than those of TFF1.
+The next plot has the same Biomarkers but this time scaled using: x' = (x - x) .
+
+This plot it becomes much clearer that there is indeed an upward trend regarding the biomarkers and the stages of PDAC. The next thing to do was to look if outliers severely impacted the data so a plot was created with outliers removed and the data scaled.
+In this plot the values stay the same but the data is now scaled and the outliers are removed.
+
+
+This plot again showcases an upward trend in biomarkers. However the outliers were decided useful as false negatives or false positives in an algorithm to decide if one person has cancer is highly dangerous.
+In the next step the biomarkers were looked at individually, but again scaled.
+
+This is exactly the same as the second plot but divided which makes the differences a lot clearer. For example TFF1 shows less trend now than in the previous plot. However this was concluded to be one extreme outlier in the IIB stage.
+
+
+Next up was finding out if age affected any of these biomarkers, this was done by creating a simple scatter plot and a trendline of the three biomarkers. 
+
+Interestingly it appears all three have an upward trend regarding the age of the patient tested. This might affect the algorithm positively, but it may also mean that the biomarkers have less of an impact than thought.
+In order to further study correlations between numeric variables A heatmap was created to look at possible effectors of the biomarkers.
+
+
+
+This plot showcased another correlation between LYVE1 and creatinine, this can be useful in order to further the algorithm.
+Discussion & Conclusion
+resume results
+To answer the question, “What’s the minimal amount of data combinations to predict a patient has pancreatic ductal adenocarcinoma?” The data succeeded in giving a better image of if this is possible. However It’s still quite unclear if it’s possible to decide if this data can be compromised and still gain good results if it is subjected to an algorithm. In the plots created, it shows clearly that there is a trend line in the stages and biomarkers. but as found in the later plots it shows that this might be due to the age. This makes the reliability of the first plots considerably lower, nonetheless it should still be possible to use all the data values combined to predict if a patient has PDAC.
+
+discussion
+Comparing the plots created against the official paper it shows that indeed there is a valuable correlation between the biomarkers and the stage. But what was surprising to see is that age also correlates strongly to one of the biomarkers as does creatinine. This does expose a few cracks in my thesis.
+
+This research is weakened by the lack of further research into creatinine and blood plasma. These are valuable points and should have been created to get a better view if the future algorithm is helped or not by these values. This could easily be avoided by creating some small plots which show the correlation between the biomarkers and these bodily factors.
+
+Perspective and conclusion:
+The results of this report made a better insight if less factors could be used to predict if a patient has cancer or not, In the future however a careful eye must be casted over the bodily factors such as creatinine, blood plasma and age. If this research is successful it could mean that cancer can be predicted without need of a person’s blood or personal data.
+
+
+References
+[1] https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer
