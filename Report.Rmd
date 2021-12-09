@@ -34,13 +34,13 @@ In this paper, the main goal is to research the effect of urinary biomarker on p
 
 ## Material & Methods  
 This paper has made use of several programs such as, Weka, Rstudio and Java to further this research.
-The Java was used to make a tool which uses weka to predict the stages of PDAC.
-The Rstudio was used to create a research paper and make an Explorotory Data Analysis (EDA).   
+The Java was used to make a tool which uses Weka to predict the stages of PDAC.
+The Rstudio was used to create a research paper and make an Exploratory Data Analysis (EDA).   
 ## Results  
-The result of this study were that it is possible to leave out the factors, age and the sex. The most important variables were the biomarkes used, the creatinine and the bloodplasma. 
+The result of this study were that it is possible to leave out the factors, age and the sex. The most important variables were the biomarkers used, the creatinine and the blood plasma. 
 
 ## Conclusion
-The conclusion gotten is that creatinine, bloodplasma and the biomarkers are very usefull for prediction for prediction of cancer stages.
+The conclusion gotten is that creatinine, blood plasma and the biomarkers are very useful for prediction for prediction of cancer stages.
 It is also very possible to predict the stages to an accuracy of 75 percent. 
 
 \newpage  
@@ -62,9 +62,9 @@ It is also very possible to predict the stages to an accuracy of 75 percent.
 
 \newpage
 # Introduction
-This report is about visualisation of the data gained by the “Urinary biomarkers for pancreatic cancer” dataset [1].  The paper referenced on this website uses biomarkers in order to check if somebody has pancreatic cancer. The main reason for this paper was to test if their newly improved biomarker (REG1B), was better than their other older biomarker (REG1A). Which they concluded to be true.
+This report is about visualization of the data gained by the “Urinary biomarkers for pancreatic cancer” data set [1].  The paper referenced on this website uses biomarkers in order to check if somebody has pancreatic cancer. The main reason for this paper was to test if their newly improved biomarker (REG1B), was better than their other older biomarker (REG1A). Which they concluded to be true.
 
-In this report the data is visualised using the programming language R. The goal of this report is to discuss and conclude the results of the Exploratory Data Analysis (EDA). 
+In this report the data is visualized using the programming language R. The goal of this report is to discuss and conclude the results of the Exploratory Data Analysis (EDA). 
  
 In the EDA the main thesis was, “What’s the minimal amount of data combinations to predict a patient has pancreatic ductal adenocarcinoma?”.  In order to answer this, the first step was to visualize the data using R, and later on WEKA will be used in order to try and find the least amount of data values.
 
@@ -72,10 +72,13 @@ In the EDA the main thesis was, “What’s the minimal amount of data combinati
 # Material & Methods
 
 ## Materials
-The data obtained was gainend from [kaggle](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer)[1]
+The data obtained was gainen from [kaggle](https://www.kaggle.com/johnjdavisiv/urinary-biomarkers-for-pancreatic-cancer)[1]
+The project was maintained via github:  
+github for report, [report](https://github.com/JoshuaTolhuis/Urinary-Biomarkers-Thema09)  
+github for Weka Api, [Weka Api](https://github.com/JoshuaTolhuis/WekaApiUrinaryBiomarkers)  
 
 For this project mainly programming software and libraries were used.  
-Also Weka was used in order to optain an ROC curve.  
+Also Weka was used in order to obtain an ROC curve.  
 Table with software used:
 
 Software         | Version         
@@ -105,12 +108,25 @@ ggfortify   (R)  | 0.4.3
 ## Methods  
 This software was used as followed:
 The R, Rstudio and RMarkdown, were used to visualize the data. Create several plots correlating different variables and looking at those results. It was also used to create a report.
-Java, Gradle and Java's SDK and JDK were used to create an tool which uses a Weka algorithm to predict cancer stages from a specifiek file. Java also used R to correct the file inserted into via the commandline.
+Java, Gradle and Java's SDK and JDK were used to create an tool which uses a Weka algorithm to predict cancer stages from a specific file. Java also used R to correct the file inserted into via the command line.
 
 \newpage
 
+## Project Proposal
+In This project I also had to decide which minor to follow in my upcoming semester. My choice for minor was "Application design".  
+My choice for this minor was a difficult choice considering I liked both minors and found both very interesting. The main reason I chose Application design in the end was due to the projects concerning the 2 minors.  
+I found myself enjoying the web design project a lot more than the data mining project.  
+I also did my research on both minors and decided that even if data mining & machine learning is a very popular topic, it doesn't tackle how to handle clients like Application design does.  
+This in my opinion is a very important skill as communication between scientists, marketing and bio bioinformatics is key.  
+The main reason this is key is to have knowledge on if certain aspects are possible to code as to not over or under sell my job in the future.  
+This was confirmed by one of the senior students I spoke to when they presented their project on the minor.  
+This is the main reason why I want to follow the Application design minor.  
+
+\newpage
+
+
 # Results
-The EDA gave some useful insights regarding the obtained dataset.
+The EDA gave some useful insights regarding the obtained data set.
 The first step was to see all the data by making a small table containing the data to test if it all loaded in properly and if any data was missing, here’s a small preview of this table.
 
 ```{r, echo=FALSE}
@@ -123,7 +139,7 @@ knitr::kable(head(data[9:14]))
 
 ```
 
-As can be seen in this small table, A few problems arise, the stage and benign_sampele_diagnosis. appear to be empty, but after closer inspection of the data it just means that these people aren’t yet in a stage and also do not have a benign sample because they are the control group and don’t have Pancreatic Ductal AdenoCarcinoma(PDAC). After checking the code book, All the data was accounted for and no cleaning needed to be done.
+As can be seen in this small table, A few problems arise, the stage and benign_sample_diagnosis. appear to be empty, but after closer inspection of the data it just means that these people aren’t yet in a stage and also do not have a benign sample because they are the control group and don’t have Pancreatic Ductal AdenoCarcinoma(PDAC). After checking the code book, All the data was accounted for and no cleaning needed to be done.
 
 \newpage
 The first thing to look at was just a general view of the bio marker and how it corresponded to different stages of PDAC. The bio marker chosen was REG1B.  
